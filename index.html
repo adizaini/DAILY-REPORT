@@ -1,1100 +1,590 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Laporan Produksi Otomatis - v7</title>
-    <style>
-        :root {
-            --bg-body: #f3f4f6;
-            --bg-card: #ffffff;
-            --bg-input: #f9fafb;
-            --bg-sub: #f1f5f9;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border-color: #d1d5db;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --warning: #d97706;
-            --wa-green: #22c55e;
-        }
-
-        html.dark {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --bg-input: #0f172a;
-            --bg-sub: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --wa-green: #16a34a;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            padding-bottom: 40px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 12px;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 16px;
-            background-color: var(--bg-card);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .header h1 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .theme-btn {
-            background-color: var(--bg-sub);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Navigation Tabs */
-        .nav-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 14px;
-            background-color: var(--bg-card);
-            padding: 6px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .tab-btn {
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            background: transparent;
-            color: var(--text-muted);
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: #ffffff;
-        }
-
-        /* Card Section */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 14px;
-            border: 1px solid var(--border-color);
-        }
-
-        .card-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Kop Selector */
-        .kop-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .kop-btn {
-            padding: 10px 6px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-input);
-            color: var(--text-main);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .kop-btn.active {
-            background-color: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
-        }
-
-        /* Form Inputs */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-input);
-            color: var(--text-main);
-            font-size: 16px; /* Mencegah auto-zoom di iOS/Android */
-            outline: none;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-        }
-
-        /* Item Row Card */
-        .item-row {
-            background-color: var(--bg-sub);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            position: relative;
-        }
-
-        .item-row-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
-        .btn-remove {
-            background-color: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .row-qty-unit {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            gap: 6px;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px dashed var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-danger-outline {
-            background-color: transparent;
-            border: 1px dashed var(--danger);
-            color: var(--danger);
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: #ffffff;
-        }
-
-        .btn-wa {
-            background-color: var(--wa-green);
-            color: #ffffff;
-            margin-top: 8px;
-        }
-
-        .btn-copy {
-            background-color: var(--bg-sub);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Preview WA Box */
-        .wa-preview {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            font-family: monospace;
-            font-size: 13px;
-            white-space: pre-wrap;
-            line-height: 1.5;
-            margin-bottom: 12px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        /* Master Group Card */
-        .group-card {
-            background-color: var(--bg-sub);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
-        .group-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .group-title {
-            font-weight: 700;
-            font-size: 15px;
-        }
-
-        .badge {
-            background-color: var(--primary);
-            color: white;
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 99px;
-            margin-left: 6px;
-        }
-
-        .master-item-list {
-            list-style: none;
-            margin-bottom: 10px;
-        }
-
-        .master-item-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            font-size: 14px;
-            border: 1px solid var(--border-color);
-        }
-
-        .add-item-inline {
-            display: grid;
-            grid-template-columns: 2fr 1fr auto;
-            gap: 6px;
-        }
-
-        .btn-sm {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #10b981;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 99px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Produksi Otomatis - v7.2</title>
+<style>
+  :root {
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #d1d5db;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --input-bg: #f9fafb;
+    --preview-bg: #e5e7eb;
+  }
+  [data-theme="dark"] {
+    --bg: #111827;
+    --card: #1f2937;
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --border: #374151;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --input-bg: #111827;
+    --preview-bg: #0f172a;
+  }
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--text); transition: 0.2s; }
+  .container { max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  h1 { font-size: 1.35rem; margin: 0; }
+  .badge { font-size: 0.75rem; color: var(--muted); }
+  .btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { opacity: 0.9; }
+  .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .btn-success { background: var(--success); color: #fff; border-color: var(--success); }
+  .btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); padding: 6px 10px; font-size: 0.8rem; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-weight: 600; cursor: pointer; }
+  .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .card h2 { font-size: 1rem; margin: 0 0 12px 0; color: var(--primary); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .grid-2 { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; color: var(--muted); }
+  input, select, textarea { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); font-size: 0.92rem; }
+  .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radio-pill { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; background: var(--input-bg); }
+  .radio-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .item-row { display: grid; grid-template-columns: 1.2fr 1.5fr 0.8fr auto; gap: 8px; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--border); }
+  @media (max-width: 600px) { .item-row { grid-template-columns: 1fr; } }
+  pre { background: var(--preview-bg); padding: 14px; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; font-size: 0.88rem; border: 1px solid var(--border); margin: 0 0 12px 0; }
+  .action-bar { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hidden { display: none; }
+  .group-box { border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { background: var(--input-bg); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px; }
+  .tag span { cursor: pointer; color: var(--danger); font-weight: bold; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: #111827; color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 0.88rem; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 99; }
+  .toast.show { opacity: 1; }
+</style>
 </head>
 <body>
-
 <div class="container">
-    <!-- Header -->
-    <div class="header">
+  <header>
+    <div>
+      <h1>Laporan Produksi Otomatis - v7.2</h1>
+      <div class="badge">Offline-Ready • Siap Kirim WA</div>
+    </div>
+    <button type="button" class="btn" id="btnTheme">🌙 Dark</button>
+  </header>
+
+  <div class="tabs">
+    <button type="button" class="tab-btn active" id="tabLaporan">📝 Buat Laporan</button>
+    <button type="button" class="tab-btn" id="tabMaster">📦 Daftar Produk & Item</button>
+  </div>
+
+  <!-- TAB 1: BUAT LAPORAN -->
+  <div id="viewLaporan">
+    <div class="card">
+      <h2>1. Pilih Kop Laporan</h2>
+      <div class="radio-group" id="kopGroup">
+        <div class="radio-pill active" data-val="UV PRINT">UV Print</div>
+        <div class="radio-pill" data-val="HOT PRINT">Hot Print</div>
+        <div class="radio-pill" data-val="DATECODE">Datecode</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Informasi Shift & Tenaga Kerja</h2>
+      <div class="grid-2">
         <div>
-            <h1>Laporan Produksi</h1>
-            <p>Offline-Ready &bull; Siap Kirim WA</p>
+          <label>Tanggal</label>
+          <input type="date" id="inpTanggal">
         </div>
-        <button type="button" class="theme-btn" id="btn-theme">☀️ Light</button>
+        <div>
+          <label>Shift</label>
+          <select id="inpShift">
+            <option value="Shift 1">Shift 1</option>
+            <option value="Shift 2">Shift 2</option>
+            <option value="Shift 3">Shift 3</option>
+            <option value="Non-Shift / Reguler">Non-Shift / Reguler</option>
+          </select>
+        </div>
+        <div>
+          <label>Jumlah Orang</label>
+          <input type="number" id="inpOrang" value="1" min="1">
+        </div>
+        <div>
+          <label>Jam Kerja (Jam)</label>
+          <input type="number" id="inpJam" value="7" min="1" step="0.5">
+        </div>
+      </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs">
-        <button type="button" class="tab-btn active" id="tab-laporan">📝 Buat Laporan</button>
-        <button type="button" class="tab-btn" id="tab-master">📦 Daftar Produk & Item</button>
+    <div class="card">
+      <h2>3. Hasil Produksi</h2>
+      <div id="listProduksi"></div>
+      <button type="button" class="btn btn-primary" id="btnAddProduksi">+ Tambah Item Produksi</button>
     </div>
 
-    <!-- ==================== HALAMAN 1: BUAT LAPORAN ==================== -->
-    <div id="page-laporan">
-        <!-- Pilih Kop Laporan -->
-        <div class="card">
-            <div class="card-title">1. Pilih Kop Laporan</div>
-            <div class="kop-grid" id="kop-container">
-                <button type="button" class="kop-btn active" data-kop="LAPORAN PRODUKSI UV PRINT">UV Print</button>
-                <button type="button" class="kop-btn" data-kop="LAPORAN PRODUKSI HOT PRINT">Hot Print</button>
-                <button type="button" class="kop-btn" data-kop="LAPORAN PRODUKSI DATECODE">Datecode</button>
-            </div>
-        </div>
-
-        <!-- Info Umum -->
-        <div class="card">
-            <div class="card-title">2. Informasi Shift & Tenaga Kerja</div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="inp-tanggal">Tanggal</label>
-                    <input type="date" id="inp-tanggal">
-                </div>
-                <div class="form-group">
-                    <label for="inp-shift">Shift</label>
-                    <select id="inp-shift">
-                        <option value="Shift 1">Shift 1</option>
-                        <option value="Shift 2">Shift 2</option>
-                        <option value="Shift 3">Shift 3</option>
-                        <option value="Non-Shift / Reguler">Non-Shift / Reguler</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="inp-orang">Jumlah Orang</label>
-                    <input type="number" id="inp-orang" inputmode="numeric" placeholder="Contoh: 5" min="1">
-                </div>
-                <div class="form-group">
-                    <label for="inp-jam">Jam Kerja (Jam)</label>
-                    <input type="number" id="inp-jam" inputmode="decimal" step="0.5" placeholder="Contoh: 8" min="0.5">
-                </div>
-            </div>
-        </div>
-
-        <!-- Hasil Produksi -->
-        <div class="card">
-            <div class="card-title">
-                <span>3. Hasil Produksi</span>
-            </div>
-            <div id="list-produksi"></div>
-            <button type="button" class="btn btn-outline" id="btn-add-produksi">+ Tambah Item Produksi</button>
-        </div>
-
-        <!-- Laporan Afkir -->
-        <div class="card">
-            <div class="card-title">
-                <span>4. Laporan Afkir (Reject)</span>
-            </div>
-            <div id="list-afkir"></div>
-            <button type="button" class="btn btn-danger-outline" id="btn-add-afkir">+ Tambah Item Afkir</button>
-        </div>
-
-        <!-- NB / Catatan -->
-        <div class="card">
-            <div class="card-title">5. NB / Catatan Tambahan</div>
-            <div class="form-group" style="margin-bottom:0;">
-                <textarea id="inp-nb" rows="3" placeholder="Tulis catatan kendala mesin, pergantian order, atau info penting lainnya..."></textarea>
-            </div>
-        </div>
-
-        <!-- Hasil Generate WA -->
-        <div class="card">
-            <div class="card-title">
-                <span>6. Preview Pesan WhatsApp</span>
-                <button type="button" class="btn-sm" style="background:var(--bg-sub); color:var(--danger); border:1px solid var(--border-color);" id="btn-reset-form">Reset Form</button>
-            </div>
-            <div class="wa-preview" id="wa-output"></div>
-            <button type="button" class="btn btn-copy" id="btn-copy-wa">📋 Salin Teks Laporan</button>
-            <button type="button" class="btn btn-wa" id="btn-send-wa">🚀 Kirim Langsung ke WhatsApp</button>
-        </div>
+    <div class="card">
+      <h2>4. Laporan Afkir (Reject)</h2>
+      <div id="listAfkir"></div>
+      <button type="button" class="btn btn-danger" id="btnAddAfkir">+ Tambah Item Afkir</button>
     </div>
 
-    <!-- ==================== HALAMAN 2: DAFTAR PRODUK & ITEM ==================== -->
-    <div id="page-master" class="hidden">
-        <div class="card">
-            <div class="card-title">Tambah Kelompok Produk Baru</div>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
-                Buat nama produk induk terlebih dahulu (misal: <b>Botol Serum 30ml</b>), lalu masukkan daftar item/variannya di bawah.
-            </p>
-            <div style="display:flex; gap:8px;">
-                <input type="text" id="new-group-name" placeholder="Nama Kelompok Produk...">
-                <button type="button" class="btn-sm btn-primary" id="btn-add-group" style="white-space:nowrap;">+ Kelompok</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Daftar Kelompok & Item Tersimpan</div>
-            <div class="form-group">
-                <input type="text" id="search-master" placeholder="🔍 Cari nama produk atau item...">
-            </div>
-            <div id="master-groups-container"></div>
-        </div>
+    <div class="card">
+      <h2>5. NB / Catatan Tambahan</h2>
+      <textarea id="inpCatatan" rows="3" placeholder="Contoh:&#10;- Trouble Garis mesin 1&#10;- Adjust Color Rapunzel L (3 jam)"></textarea>
     </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h2 style="margin:0;">6. Preview Pesan WhatsApp</h2>
+        <button type="button" class="btn" id="btnReset">🔄 Reset Form</button>
+      </div>
+      <pre id="previewBox"></pre>
+      <div class="action-bar">
+        <button type="button" class="btn btn-primary" id="btnCopy">📋 Salin Teks Laporan</button>
+        <button type="button" class="btn btn-success" id="btnWA">🚀 Kirim Langsung ke WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: DAFTAR PRODUK & ITEM -->
+  <div id="viewMaster" class="hidden">
+    <div class="card">
+      <h2>Tambah Kelompok Produk Baru</h2>
+      <p style="font-size:0.85rem; color:var(--muted); margin-top:0;">Buat kode/nama kelompok produk terlebih dahulu (misal: <b>762423</b> atau <b>Botol Serum 30ml</b>), lalu masukkan daftar item/variannya.</p>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="newGroupName" placeholder="Nama / Kode Kelompok (contoh: 762423)">
+        <button type="button" class="btn btn-primary" id="btnAddGroup">+ Kelompok</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Daftar Kelompok & Item Tersimpan</h2>
+      <div id="masterListContainer"></div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast">Berhasil disalin!</div>
 
 <script>
 (function() {
-    // --- DATA DEFAULT ---
-    const defaultGroups = [
-        {
-            id: 'grp_1',
-            name: 'Botol Serum 30ml',
-            items: [
-                { id: 'itm_1', name: 'Botol Kaca Bening 30ml', unit: 'Pcs' },
-                { id: 'itm_2', name: 'Botol Frosted Putih 30ml', unit: 'Pcs' },
-                { id: 'itm_3', name: 'Pipet Ring Gold 30ml', unit: 'Pcs' }
-            ]
-        },
-        {
-            id: 'grp_2',
-            name: 'Pot Cream 15gr',
-            items: [
-                { id: 'itm_4', name: 'Pot Akrilik Putih 15gr', unit: 'Pcs' },
-                { id: 'itm_5', name: 'Inner Lid Pot 15gr', unit: 'Pcs' }
-            ]
-        }
-    ];
+  var STORAGE_KEY = 'laporan_produksi_master_v7';
+  var defaultMaster = [
+    {
+      group: '762423',
+      items: ['Dumbo (R)', 'Treasure (L)', 'Rapunzel (L)', 'Rapunzel (R)', 'Mickey Double (R)']
+    }
+  ];
 
-    // --- STATE ---
-    let groups = [];
+  var masterData = [];
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    masterData = saved ? JSON.parse(saved) : defaultMaster;
+  } catch (e) {
+    masterData = defaultMaster;
+  }
+
+  var prodRows = [
+    { group: '762423', item: 'Dumbo (R)', qty: '' }
+  ];
+  var afkirRows = [];
+  var selectedKop = 'UV PRINT';
+
+  function saveMaster() {
     try {
-        const saved = localStorage.getItem('prod_groups_v7');
-        groups = saved ? JSON.parse(saved) : defaultGroups;
-        if (!Array.isArray(groups)) groups = defaultGroups;
-    } catch (e) {
-        groups = defaultGroups;
-    }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(masterData));
+    } catch (e) {}
+  }
 
-    let selectedKop = 'LAPORAN PRODUKSI UV PRINT';
-    let produksiRows = [];
-    let afkirRows = [];
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2200);
+  }
 
-    // --- HELPER FUNCTIONS ---
-    function saveGroups() {
-        try {
-            localStorage.setItem('prod_groups_v7', JSON.stringify(groups));
-        } catch (e) {}
-    }
+  // Set default date today
+  var dateInput = document.getElementById('inpTanggal');
+  var today = new Date();
+  var yyyy = today.getFullYear();
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var dd = String(today.getDate()).padStart(2, '0');
+  dateInput.value = yyyy + '-' + mm + '-' + dd;
 
-    function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2200);
-    }
+  // Theme Toggle
+  var btnTheme = document.getElementById('btnTheme');
+  btnTheme.addEventListener('click', function() {
+    var html = document.documentElement;
+    var isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    btnTheme.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+  });
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;");
-    }
+  // Tabs
+  var tabLaporan = document.getElementById('tabLaporan');
+  var tabMaster = document.getElementById('tabMaster');
+  var viewLaporan = document.getElementById('viewLaporan');
+  var viewMaster = document.getElementById('viewMaster');
 
-    function generateId(prefix) {
-        return prefix + '_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-    }
+  tabLaporan.addEventListener('click', function() {
+    tabLaporan.classList.add('active');
+    tabMaster.classList.remove('active');
+    viewLaporan.classList.remove('hidden');
+    viewMaster.classList.add('hidden');
+    renderRows('prod');
+    renderRows('afkir');
+    updatePreview();
+  });
 
-    // --- THEME TOGGLE ---
-    const btnTheme = document.getElementById('btn-theme');
-    function updateThemeBtn() {
-        const isDark = document.documentElement.classList.contains('dark');
-        btnTheme.textContent = isDark ? '☀️ Light' : '🌙 Dark';
-    }
-    btnTheme.addEventListener('click', function() {
-        document.documentElement.classList.toggle('dark');
-        const isDark = document.documentElement.classList.contains('dark');
-        try { localStorage.setItem('prod_theme_v7', isDark ? 'dark' : 'light'); } catch(e) {}
-        updateThemeBtn();
+  tabMaster.addEventListener('click', function() {
+    tabMaster.classList.add('active');
+    tabLaporan.classList.remove('active');
+    viewMaster.classList.remove('hidden');
+    viewLaporan.classList.add('hidden');
+    renderMaster();
+  });
+
+  // Kop Selection
+  var kopPills = document.querySelectorAll('#kopGroup .radio-pill');
+  kopPills.forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      kopPills.forEach(function(p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      selectedKop = pill.getAttribute('data-val');
+      updatePreview();
     });
-    try {
-        if (localStorage.getItem('prod_theme_v7') === 'light') {
-            document.documentElement.classList.remove('dark');
-        }
-    } catch(e) {}
-    updateThemeBtn();
+  });
 
-    // --- NAVIGATION TABS ---
-    const tabLaporan = document.getElementById('tab-laporan');
-    const tabMaster = document.getElementById('tab-master');
-    const pageLaporan = document.getElementById('page-laporan');
-    const pageMaster = document.getElementById('page-master');
+  // Render Dynamic Rows
+  function renderRows(type) {
+    var container = document.getElementById(type === 'prod' ? 'listProduksi' : 'listAfkir');
+    var data = type === 'prod' ? prodRows : afkirRows;
+    container.innerHTML = '';
 
-    tabLaporan.addEventListener('click', function() {
-        tabLaporan.classList.add('active');
-        tabMaster.classList.remove('active');
-        pageLaporan.classList.remove('hidden');
-        pageMaster.classList.add('hidden');
-        renderProduksiRows();
-        renderAfkirRows();
-        updateWAPreview();
-    });
+    data.forEach(function(row, idx) {
+      var div = document.createElement('div');
+      div.className = 'item-row';
 
-    tabMaster.addEventListener('click', function() {
-        tabMaster.classList.add('active');
-        tabLaporan.classList.remove('active');
-        pageMaster.classList.remove('hidden');
-        pageLaporan.classList.add('hidden');
-        renderMasterGroups();
-    });
+      // Group Select
+      var selGroup = document.createElement('select');
+      var optManualG = document.createElement('option');
+      optManualG.value = '__manual__';
+      optManualG.textContent = '-- Pilih Kelompok --';
+      selGroup.appendChild(optManualG);
 
-    // --- KOP SELECTOR ---
-    const kopContainer = document.getElementById('kop-container');
-    kopContainer.addEventListener('click', function(e) {
-        const btn = e.target.closest('.kop-btn');
-        if (!btn) return;
-        kopContainer.querySelectorAll('.kop-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedKop = btn.getAttribute('data-kop');
-        updateWAPreview();
-    });
+      masterData.forEach(function(m) {
+        var opt = document.createElement('option');
+        opt.value = m.group;
+        opt.textContent = m.group;
+        if (row.group === m.group) opt.selected = true;
+        selGroup.appendChild(opt);
+      });
 
-    // --- BUILD ITEM SELECT OPTIONS ---
-    function buildItemOptionsHtml(selectedValue) {
-        let html = '<option value="">-- Pilih Item Produksi --</option>';
-        groups.forEach(g => {
-            if (g.items && g.items.length > 0) {
-                html += `<optgroup label="📁 ${escapeHtml(g.name)} (${g.items.length} item)">`;
-                g.items.forEach(item => {
-                    const val = `${g.name} - ${item.name}`;
-                    const isSel = (selectedValue === val) ? 'selected' : '';
-                    html += `<option value="${escapeHtml(val)}" data-unit="${escapeHtml(item.unit || 'Pcs')}" ${isSel}>${escapeHtml(item.name)}</option>`;
-                });
-                html += `</optgroup>`;
-            }
+      // Item Select or Input
+      var grpObj = masterData.find(function(m) { return m.group === row.group; });
+      var itemEl;
+      if (grpObj && grpObj.items.length > 0) {
+        itemEl = document.createElement('select');
+        var optPlaceholder = document.createElement('option');
+        optPlaceholder.value = '';
+        optPlaceholder.textContent = '-- Pilih Item --';
+        itemEl.appendChild(optPlaceholder);
+
+        grpObj.items.forEach(function(it) {
+          var opt = document.createElement('option');
+          opt.value = it;
+          opt.textContent = it;
+          if (row.item === it) opt.selected = true;
+          itemEl.appendChild(opt);
         });
-        const isManual = (selectedValue === '__MANUAL__') ? 'selected' : '';
-        html += `<option value="__MANUAL__" ${isManual}>✏️ + Ketik Nama Item Manual...</option>`;
-        return html;
+      } else {
+        itemEl = document.createElement('input');
+        itemEl.type = 'text';
+        itemEl.placeholder = 'Nama Item';
+        itemEl.value = row.item;
+      }
+
+      // Qty Input
+      var inpQty = document.createElement('input');
+      inpQty.type = 'number';
+      inpQty.placeholder = 'Pcs';
+      inpQty.min = '0';
+      inpQty.value = row.qty;
+
+      // Delete Btn
+      var btnDel = document.createElement('button');
+      btnDel.type = 'button';
+      btnDel.className = 'btn btn-danger';
+      btnDel.textContent = '✕';
+
+      // Events
+      selGroup.addEventListener('change', function() {
+        row.group = selGroup.value === '__manual__' ? '' : selGroup.value;
+        var found = masterData.find(function(m) { return m.group === row.group; });
+        row.item = (found && found.items.length > 0) ? found.items[0] : '';
+        renderRows(type);
+        updatePreview();
+      });
+
+      itemEl.addEventListener('change', function() {
+        row.item = itemEl.value;
+        updatePreview();
+      });
+      itemEl.addEventListener('input', function() {
+        row.item = itemEl.value;
+        updatePreview();
+      });
+
+      inpQty.addEventListener('input', function() {
+        row.qty = inpQty.value;
+        updatePreview();
+      });
+
+      btnDel.addEventListener('click', function() {
+        data.splice(idx, 1);
+        renderRows(type);
+        updatePreview();
+      });
+
+      div.appendChild(selGroup);
+      div.appendChild(itemEl);
+      div.appendChild(inpQty);
+      div.appendChild(btnDel);
+      container.appendChild(div);
+    });
+  }
+
+  document.getElementById('btnAddProduksi').addEventListener('click', function() {
+    var defG = masterData.length > 0 ? masterData[0].group : '';
+    var defI = (masterData.length > 0 && masterData[0].items.length > 0) ? masterData[0].items[0] : '';
+    prodRows.push({ group: defG, item: defI, qty: '' });
+    renderRows('prod');
+    updatePreview();
+  });
+
+  document.getElementById('btnAddAfkir').addEventListener('click', function() {
+    var defG = masterData.length > 0 ? masterData[0].group : '';
+    var defI = (masterData.length > 0 && masterData[0].items.length > 0) ? masterData[0].items[0] : '';
+    afkirRows.push({ group: defG, item: defI, qty: '' });
+    renderRows('afkir');
+    updatePreview();
+  });
+
+  // Format Tanggal Indonesia
+  function formatIndoDate(dateStr) {
+    if (!dateStr) return '-';
+    var days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    var parts = dateStr.split('-');
+    var d = new Date(parts[0], parts[1] - 1, parts[2]);
+    return days[d.getDay()] + ', ' + parseInt(parts[2], 10) + ' ' + months[d.getMonth()] + ' ' + parts[0];
+  }
+
+  // Group items helper (1 group header, dash list without numbers)
+  function formatGroupedSection(rows) {
+    var valid = rows.filter(function(r) { return r.item && r.qty !== ''; });
+    if (valid.length === 0) return '- Tidak ada data';
+
+    var grouped = {};
+    var order = [];
+    valid.forEach(function(r) {
+      var g = r.group ? r.group.trim() : 'Umum';
+      if (!grouped[g]) {
+        grouped[g] = [];
+        order.push(g);
+      }
+      grouped[g].push('- ' + r.item + ' : *' + r.qty + ' Pcs*');
+    });
+
+    var lines = [];
+    order.forEach(function(g) {
+      if (g !== 'Umum') {
+        lines.push('*' + g + '*');
+      }
+      grouped[g].forEach(function(line) {
+        lines.push(line);
+      });
+    });
+    return lines.join('\n');
+  }
+
+  function updatePreview() {
+    var tgl = formatIndoDate(document.getElementById('inpTanggal').value);
+    var shift = document.getElementById('inpShift').value;
+    var orang = document.getElementById('inpOrang').value || '0';
+    var jam = document.getElementById('inpJam').value || '0';
+    var catatan = document.getElementById('inpCatatan').value.trim();
+
+    var text = '*LAPORAN PRODUKSI ' + selectedKop + '*\n';
+    text += '==============================\n';
+    text += '📅 Tanggal : ' + tgl + '\n';
+    text += '⏰ Shift : ' + shift + '\n';
+    text += '👷 Jumlah Orang : ' + orang + ' Orang\n';
+    text += '⏱️ Jam Kerja : ' + jam + ' Jam\n\n';
+
+    text += '*HASIL PRODUKSI :*\n';
+    text += formatGroupedSection(prodRows) + '\n\n';
+
+    text += '*LAPORAN AFKIR :*\n';
+    text += formatGroupedSection(afkirRows);
+
+    if (catatan) {
+      text += '\n\n*NB / Catatan :*\n_' + catatan + '_';
     }
 
-    // --- RENDER PRODUKSI ROWS ---
-    const listProduksiEl = document.getElementById('list-produksi');
+    document.getElementById('previewBox').textContent = text;
+  }
 
-    function addProduksiRow() {
-        produksiRows.push({
-            id: generateId('prod'),
-            selectedItem: '',
-            manualName: '',
-            qty: '',
-            unit: 'Pcs',
-            note: ''
-        });
-        renderProduksiRows();
-        updateWAPreview();
-    }
+  ['inpTanggal', 'inpShift', 'inpOrang', 'inpJam', 'inpCatatan'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', updatePreview);
+    document.getElementById(id).addEventListener('change', updatePreview);
+  });
 
-    function renderProduksiRows() {
-        listProduksiEl.innerHTML = '';
-        produksiRows.forEach((row, idx) => {
-            const div = document.createElement('div');
-            div.className = 'item-row';
-            div.dataset.id = row.id;
+  // Reset Form
+  document.getElementById('btnReset').addEventListener('click', function() {
+    prodRows = [];
+    afkirRows = [];
+    document.getElementById('inpCatatan').value = '';
+    renderRows('prod');
+    renderRows('afkir');
+    updatePreview();
+    showToast('Form berhasil direset');
+  });
 
-            const isManual = row.selectedItem === '__MANUAL__';
-
-            div.innerHTML = `
-                <div class="item-row-header">
-                    <span>Item Produksi #${idx + 1}</span>
-                    ${produksiRows.length > 1 ? `<button type="button" class="btn-remove" data-action="remove-prod" data-id="${row.id}">Hapus</button>` : ''}
-                </div>
-                <select class="prod-select" data-id="${row.id}">
-                    ${buildItemOptionsHtml(row.selectedItem)}
-                </select>
-                <input type="text" class="prod-manual ${isManual ? '' : 'hidden'}" data-id="${row.id}" placeholder="Ketik nama item manual..." value="${escapeHtml(row.manualName)}" style="margin-top:8px;">
-                <div class="row-qty-unit">
-                    <input type="number" inputmode="numeric" class="prod-qty" data-id="${row.id}" placeholder="Jumlah" value="${escapeHtml(row.qty)}">
-                    <select class="prod-unit" data-id="${row.id}">
-                        <option value="Pcs" ${row.unit === 'Pcs' ? 'selected' : ''}>Pcs</option>
-                        <option value="Box" ${row.unit === 'Box' ? 'selected' : ''}>Box</option>
-                        <option value="Pack" ${row.unit === 'Pack' ? 'selected' : ''}>Pack</option>
-                        <option value="Roll" ${row.unit === 'Roll' ? 'selected' : ''}>Roll</option>
-                        <option value="Kg" ${row.unit === 'Kg' ? 'selected' : ''}>Kg</option>
-                        <option value="Unit" ${row.unit === 'Unit' ? 'selected' : ''}>Unit</option>
-                    </select>
-                </div>
-                <input type="text" class="prod-note" data-id="${row.id}" placeholder="Keterangan tambahan (opsional)" value="${escapeHtml(row.note)}" style="margin-top:8px;">
-            `;
-            listProduksiEl.appendChild(div);
-        });
-    }
-
-    // Event Delegation untuk Produksi
-    listProduksiEl.addEventListener('click', function(e) {
-        const btn = e.target.closest('[data-action="remove-prod"]');
-        if (btn) {
-            const id = btn.getAttribute('data-id');
-            produksiRows = produksiRows.filter(r => r.id !== id);
-            renderProduksiRows();
-            updateWAPreview();
-        }
-    });
-
-    listProduksiEl.addEventListener('change', function(e) {
-        const target = e.target;
-        const id = target.getAttribute('data-id');
-        const row = produksiRows.find(r => r.id === id);
-        if (!row) return;
-
-        if (target.classList.contains('prod-select')) {
-            row.selectedItem = target.value;
-            const opt = target.options[target.selectedIndex];
-            if (opt && opt.dataset.unit) {
-                row.unit = opt.dataset.unit;
-            }
-            renderProduksiRows();
-        } else if (target.classList.contains('prod-unit')) {
-            row.unit = target.value;
-        }
-        updateWAPreview();
-    });
-
-    listProduksiEl.addEventListener('input', function(e) {
-        const target = e.target;
-        const id = target.getAttribute('data-id');
-        const row = produksiRows.find(r => r.id === id);
-        if (!row) return;
-
-        if (target.classList.contains('prod-manual')) row.manualName = target.value;
-        if (target.classList.contains('prod-qty')) row.qty = target.value;
-        if (target.classList.contains('prod-note')) row.note = target.value;
-        updateWAPreview();
-    });
-
-    document.getElementById('btn-add-produksi').addEventListener('click', addProduksiRow);
-
-    // --- RENDER AFKIR ROWS ---
-    const listAfkirEl = document.getElementById('list-afkir');
-
-    function addAfkirRow() {
-        afkirRows.push({
-            id: generateId('afk'),
-            selectedItem: '',
-            manualName: '',
-            qty: '',
-            unit: 'Pcs',
-            reason: ''
-        });
-        renderAfkirRows();
-        updateWAPreview();
-    }
-
-    function renderAfkirRows() {
-        listAfkirEl.innerHTML = '';
-        if (afkirRows.length === 0) {
-            listAfkirEl.innerHTML = '<p style="font-size:13px; color:var(--text-muted); margin-bottom:10px; text-align:center;">Tidak ada item afkir (Nihil).</p>';
-            return;
-        }
-        afkirRows.forEach((row, idx) => {
-            const div = document.createElement('div');
-            div.className = 'item-row';
-            const isManual = row.selectedItem === '__MANUAL__';
-
-            div.innerHTML = `
-                <div class="item-row-header">
-                    <span style="color:var(--danger);">Item Afkir #${idx + 1}</span>
-                    <button type="button" class="btn-remove" data-action="remove-afk" data-id="${row.id}">Hapus</button>
-                </div>
-                <select class="afk-select" data-id="${row.id}">
-                    ${buildItemOptionsHtml(row.selectedItem)}
-                </select>
-                <input type="text" class="afk-manual ${isManual ? '' : 'hidden'}" data-id="${row.id}" placeholder="Ketik nama item afkir..." value="${escapeHtml(row.manualName)}" style="margin-top:8px;">
-                <div class="row-qty-unit">
-                    <input type="number" inputmode="numeric" class="afk-qty" data-id="${row.id}" placeholder="Jumlah Afkir" value="${escapeHtml(row.qty)}">
-                    <select class="afk-unit" data-id="${row.id}">
-                        <option value="Pcs" ${row.unit === 'Pcs' ? 'selected' : ''}>Pcs</option>
-                        <option value="Box" ${row.unit === 'Box' ? 'selected' : ''}>Box</option>
-                        <option value="Pack" ${row.unit === 'Pack' ? 'selected' : ''}>Pack</option>
-                        <option value="Roll" ${row.unit === 'Roll' ? 'selected' : ''}>Roll</option>
-                        <option value="Kg" ${row.unit === 'Kg' ? 'selected' : ''}>Kg</option>
-                    </select>
-                </div>
-                <input type="text" class="afk-reason" data-id="${row.id}" placeholder="Penyebab afkir (misal: tinta blobor, miring)" value="${escapeHtml(row.reason)}" style="margin-top:8px;">
-            `;
-            listAfkirEl.appendChild(div);
-        });
-    }
-
-    listAfkirEl.addEventListener('click', function(e) {
-        const btn = e.target.closest('[data-action="remove-afk"]');
-        if (btn) {
-            const id = btn.getAttribute('data-id');
-            afkirRows = afkirRows.filter(r => r.id !== id);
-            renderAfkirRows();
-            updateWAPreview();
-        }
-    });
-
-    listAfkirEl.addEventListener('change', function(e) {
-        const target = e.target;
-        const id = target.getAttribute('data-id');
-        const row = afkirRows.find(r => r.id === id);
-        if (!row) return;
-
-        if (target.classList.contains('afk-select')) {
-            row.selectedItem = target.value;
-            const opt = target.options[target.selectedIndex];
-            if (opt && opt.dataset.unit) {
-                row.unit = opt.dataset.unit;
-            }
-            renderAfkirRows();
-        } else if (target.classList.contains('afk-unit')) {
-            row.unit = target.value;
-        }
-        updateWAPreview();
-    });
-
-    listAfkirEl.addEventListener('input', function(e) {
-        const target = e.target;
-        const id = target.getAttribute('data-id');
-        const row = afkirRows.find(r => r.id === id);
-        if (!row) return;
-
-        if (target.classList.contains('afk-manual')) row.manualName = target.value;
-        if (target.classList.contains('afk-qty')) row.qty = target.value;
-        if (target.classList.contains('afk-reason')) row.reason = target.value;
-        updateWAPreview();
-    });
-
-    document.getElementById('btn-add-afkir').addEventListener('click', addAfkirRow);
-
-    // --- MASTER GROUPS PAGE ---
-    const masterContainer = document.getElementById('master-groups-container');
-    const searchMasterInput = document.getElementById('search-master');
-
-    function renderMasterGroups() {
-        const keyword = searchMasterInput.value.toLowerCase().trim();
-        masterContainer.innerHTML = '';
-
-        if (groups.length === 0) {
-            masterContainer.innerHTML = '<p style="font-size:13px; color:var(--text-muted); text-align:center;">Belum ada kelompok produk. Silakan buat di atas.</p>';
-            return;
-        }
-
-        groups.forEach(group => {
-            const groupMatch = group.name.toLowerCase().includes(keyword);
-            const filteredItems = group.items.filter(i => i.name.toLowerCase().includes(keyword));
-
-            if (keyword && !groupMatch && filteredItems.length === 0) return;
-
-            const itemsToShow = groupMatch ? group.items : filteredItems;
-
-            const card = document.createElement('div');
-            card.className = 'group-card';
-
-            let itemsHtml = '';
-            itemsToShow.forEach(item => {
-                itemsHtml += `
-                    <li>
-                        <span>${escapeHtml(item.name)} <small style="color:var(--text-muted);">(${escapeHtml(item.unit)})</small></span>
-                        <button type="button" class="btn-remove" data-action="del-item" data-gid="${group.id}" data-iid="${item.id}">Hapus</button>
-                    </li>
-                `;
-            });
-
-            card.innerHTML = `
-                <div class="group-header">
-                    <div>
-                        <span class="group-title">📁 ${escapeHtml(group.name)}</span>
-                        <span class="badge">${group.items.length} item</span>
-                    </div>
-                    <button type="button" class="btn-remove" data-action="del-group" data-gid="${group.id}">Hapus Grup</button>
-                </div>
-                <ul class="master-item-list">
-                    ${itemsHtml || '<li style="color:var(--text-muted); justify-content:center;">Belum ada item di kelompok ini</li>'}
-                </ul>
-                <div class="add-item-inline">
-                    <input type="text" id="input-item-${group.id}" placeholder="Nama item baru...">
-                    <select id="unit-item-${group.id}">
-                        <option value="Pcs">Pcs</option>
-                        <option value="Box">Box</option>
-                        <option value="Pack">Pack</option>
-                        <option value="Roll">Roll</option>
-                        <option value="Kg">Kg</option>
-                        <option value="Unit">Unit</option>
-                    </select>
-                    <button type="button" class="btn-sm btn-primary" data-action="add-item" data-gid="${group.id}">+ Item</button>
-                </div>
-            `;
-            masterContainer.appendChild(card);
-        });
-    }
-
-    // Tambah Kelompok Produk
-    document.getElementById('btn-add-group').addEventListener('click', function() {
-        const inp = document.getElementById('new-group-name');
-        const name = inp.value.trim();
-        if (!name) {
-            showToast('Isi nama kelompok produk dulu!');
-            return;
-        }
-        groups.unshift({
-            id: generateId('grp'),
-            name: name,
-            items: []
-        });
-        saveGroups();
-        inp.value = '';
-        renderMasterGroups();
-        showToast('Kelompok produk ditambahkan!');
-    });
-
-    // Event Delegation pada Master Container
-    masterContainer.addEventListener('click', function(e) {
-        const btn = e.target.closest('button[data-action]');
-        if (!btn) return;
-
-        const action = btn.getAttribute('data-action');
-        const gid = btn.getAttribute('data-gid');
-
-        if (action === 'add-item') {
-            const inpName = document.getElementById('input-item-' + gid);
-            const inpUnit = document.getElementById('unit-item-' + gid);
-            const itemName = inpName.value.trim();
-            if (!itemName) {
-                showToast('Ketik nama item dulu!');
-                return;
-            }
-            const grp = groups.find(g => g.id === gid);
-            if (grp) {
-                grp.items.push({
-                    id: generateId('itm'),
-                    name: itemName,
-                    unit: inpUnit.value
-                });
-                saveGroups();
-                renderMasterGroups();
-                showToast('Item berhasil disimpan!');
-            }
-        } else if (action === 'del-item') {
-            const iid = btn.getAttribute('data-iid');
-            const grp = groups.find(g => g.id === gid);
-            if (grp) {
-                grp.items = grp.items.filter(i => i.id !== iid);
-                saveGroups();
-                renderMasterGroups();
-                showToast('Item dihapus');
-            }
-        } else if (action === 'del-group') {
-            groups = groups.filter(g => g.id !== gid);
-            saveGroups();
-            renderMasterGroups();
-            showToast('Kelompok dihapus');
-        }
-    });
-
-    searchMasterInput.addEventListener('input', renderMasterGroups);
-
-    // --- GENERATE WA TEXT ---
-    const inpTanggal = document.getElementById('inp-tanggal');
-    const inpShift = document.getElementById('inp-shift');
-    const inpOrang = document.getElementById('inp-orang');
-    const inpJam = document.getElementById('inp-jam');
-    const inpNb = document.getElementById('inp-nb');
-    const waOutput = document.getElementById('wa-output');
-
-    function formatTanggalIndo(dateStr) {
-        if (!dateStr) return '-';
-        const parts = dateStr.split('-');
-        if (parts.length !== 3) return dateStr;
-        const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        const d = new Date(parts[0], parts[1] - 1, parts[2]);
-        const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        return `${hari[d.getDay()]}, ${parts[2]} ${bulan[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
-    }
-
-    function updateWAPreview() {
-        const tgl = formatTanggalIndo(inpTanggal.value);
-        const shift = inpShift.value;
-        const orang = inpOrang.value ? `${inpOrang.value} Orang` : '-';
-        const jam = inpJam.value ? `${inpJam.value} Jam` : '-';
-
-        let text = `*${selectedKop}*
-`;
-        text += `==============================
-`;
-        text += `📅 Tanggal : ${tgl}
-`;
-        text += `⏰ Shift : ${shift}
-`;
-        text += `👷 Jumlah Orang : ${orang}
-`;
-        text += `⏱️ Jam Kerja : ${jam}
-
-`;
-
-        text += `*HASIL PRODUKSI :*
-`;
-        let hasProd = false;
-        produksiRows.forEach((r, idx) => {
-            const itemName = r.selectedItem === '__MANUAL__' ? r.manualName : r.selectedItem;
-            if (itemName || r.qty) {
-                hasProd = true;
-                const qtyStr = r.qty ? `${Number(r.qty).toLocaleString('id-ID')} ${r.unit}` : '-';
-                const noteStr = r.note ? ` _(${r.note})_` : '';
-                text += `${idx + 1}. ${itemName || 'Item'} : *${qtyStr}*${noteStr}
-`;
-            }
-        });
-        if (!hasProd) text += `- Belum ada data produksi -
-`;
-
-        text += `
-*LAPORAN AFKIR :*
-`;
-        let hasAfk = false;
-        afkirRows.forEach((r, idx) => {
-            const itemName = r.selectedItem === '__MANUAL__' ? r.manualName : r.selectedItem;
-            if (itemName || r.qty) {
-                hasAfk = true;
-                const qtyStr = r.qty ? `${Number(r.qty).toLocaleString('id-ID')} ${r.unit}` : '-';
-                const reasonStr = r.reason ? ` _(${r.reason})_` : '';
-                text += `${idx + 1}. ${itemName || 'Item'} : *${qtyStr}*${reasonStr}
-`;
-            }
-        });
-        if (!hasAfk) text += `- Nihil -
-`;
-
-        if (inpNb.value.trim()) {
-            text += `
-*NB / Catatan :*
-_${inpNb.value.trim()}_
-`;
-        }
-
-        waOutput.textContent = text;
-    }
-
-    [inpTanggal, inpShift, inpOrang, inpJam, inpNb].forEach(el => {
-        el.addEventListener('input', updateWAPreview);
-        el.addEventListener('change', updateWAPreview);
-    });
-
-    // Copy & Send WA
-    document.getElementById('btn-copy-wa').addEventListener('click', function() {
-        const text = waOutput.textContent;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Teks laporan berhasil disalin!');
-            }).catch(() => fallbackCopy(text));
-        } else {
-            fallbackCopy(text);
-        }
-    });
-
-    function fallbackCopy(text) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+  // Copy Text
+  document.getElementById('btnCopy').addEventListener('click', function() {
+    var txt = document.getElementById('previewBox').textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function() {
         showToast('Teks laporan berhasil disalin!');
+      }).catch(function() {
+        fallbackCopy(txt);
+      });
+    } else {
+      fallbackCopy(txt);
+    }
+  });
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Teks laporan berhasil disalin!');
+  }
+
+  // Send WA
+  document.getElementById('btnWA').addEventListener('click', function() {
+    var txt = document.getElementById('previewBox').textContent;
+    var url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt);
+    window.open(url, '_blank');
+  });
+
+  // Master Data Management
+  document.getElementById('btnAddGroup').addEventListener('click', function() {
+    var inp = document.getElementById('newGroupName');
+    var val = inp.value.trim();
+    if (!val) return;
+    masterData.push({ group: val, items: [] });
+    saveMaster();
+    inp.value = '';
+    renderMaster();
+    showToast('Kelompok ditambahkan');
+  });
+
+  function renderMaster() {
+    var container = document.getElementById('masterListContainer');
+    container.innerHTML = '';
+
+    if (masterData.length === 0) {
+      container.innerHTML = '<p style="color:var(--muted); font-size:0.88rem;">Belum ada kelompok produk tersimpan.</p>';
+      return;
     }
 
-    document.getElementById('btn-send-wa').addEventListener('click', function() {
-        const text = encodeURIComponent(waOutput.textContent);
-        window.open(`https://wa.me/?text=${text}`, '_blank');
+    masterData.forEach(function(grp, gIdx) {
+      var box = document.createElement('div');
+      box.className = 'group-box';
+
+      var header = document.createElement('div');
+      header.className = 'group-header';
+
+      var title = document.createElement('strong');
+      title.textContent = grp.group;
+
+      var btnDelGrp = document.createElement('button');
+      btnDelGrp.type = 'button';
+      btnDelGrp.className = 'btn btn-danger';
+      btnDelGrp.textContent = 'Hapus Kelompok';
+      btnDelGrp.addEventListener('click', function() {
+        masterData.splice(gIdx, 1);
+        saveMaster();
+        renderMaster();
+      });
+
+      header.appendChild(title);
+      header.appendChild(btnDelGrp);
+      box.appendChild(header);
+
+      // Add item form
+      var addRow = document.createElement('div');
+      addRow.style.display = 'flex';
+      addRow.style.gap = '6px';
+
+      var inpItem = document.createElement('input');
+      inpItem.type = 'text';
+      inpItem.placeholder = 'Tambah nama item ke ' + grp.group + '...';
+
+      var btnAddItem = document.createElement('button');
+      btnAddItem.type = 'button';
+      btnAddItem.className = 'btn btn-primary';
+      btnAddItem.textContent = '+ Item';
+      btnAddItem.addEventListener('click', function() {
+        var v = inpItem.value.trim();
+        if (!v) return;
+        grp.items.push(v);
+        saveMaster();
+        renderMaster();
+      });
+
+      addRow.appendChild(inpItem);
+      addRow.appendChild(btnAddItem);
+      box.appendChild(addRow);
+
+      // Tags
+      var tagList = document.createElement('div');
+      tagList.className = 'tag-list';
+      grp.items.forEach(function(it, iIdx) {
+        var tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.textContent = it + ' ';
+
+        var delSpan = document.createElement('span');
+        delSpan.textContent = '×';
+        delSpan.addEventListener('click', function() {
+          grp.items.splice(iIdx, 1);
+          saveMaster();
+          renderMaster();
+        });
+
+        tag.appendChild(delSpan);
+        tagList.appendChild(tag);
+      });
+      box.appendChild(tagList);
+      container.appendChild(box);
     });
+  }
 
-    // Reset Form
-    document.getElementById('btn-reset-form').addEventListener('click', function() {
-        inpOrang.value = '';
-        inpJam.value = '';
-        inpNb.value = '';
-        produksiRows = [];
-        afkirRows = [];
-        addProduksiRow();
-        renderAfkirRows();
-        updateWAPreview();
-        showToast('Form laporan direset');
-    });
-
-    // --- INIT ---
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    inpTanggal.value = `${yyyy}-${mm}-${dd}`;
-
-    addProduksiRow();
-    renderAfkirRows();
-    updateWAPreview();
+  // Init
+  renderRows('prod');
+  renderRows('afkir');
+  updatePreview();
 })();
 </script>
 </body>
